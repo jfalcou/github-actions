@@ -1,0 +1,51 @@
+on: [push]
+
+jobs:
+  clang-sse2:
+    runs-on: ubuntu-latest
+    name: EVE:clang-sse2
+    steps:
+    - name: Testing EVE SSE2 - Clang
+      id: clang_sse2
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-msse2'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  clang-avx:
+    runs-on: ubuntu-latest
+    name: EVE:clang-avx
+    steps:
+    - name: Testing EVE AVX - Clang
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-mavx'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  clang-avx2:
+    runs-on: ubuntu-latest
+    name: EVE:clang-avx2
+    steps:
+    - name: Testing EVE AVX2 - Clang
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-mavx2'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  clang-avx512:
+    runs-on: ubuntu-latest
+    name: EVE:clang-avx512
+    steps:
+    - name: Testing EVE AVX512 - Clang
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-march=skylake-avx512'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
