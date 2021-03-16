@@ -49,3 +49,39 @@ jobs:
         branch:         'infra/tests-revamp'
         options:        '-march=skylake-avx512'
         cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  gcc-aarch64:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-aarch64
+    steps:
+    - name: Testing EVE AARCH64 - G++
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-Wno-psabi'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.aarch64.cmake'
+  gcc-arm-v7:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-arm-v7
+    steps:
+    - name: Testing EVE ARM v7 - G++
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-Wno-psabi'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.arm.cmake'
+  clang-emulation:
+    runs-on: ubuntu-latest
+    name: EVE:clang-emulation
+    steps:
+    - name: Testing EVE Emulation - Clang
+      id: clang_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-DEVE_NO_SIMD'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
