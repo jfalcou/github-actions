@@ -49,6 +49,55 @@ jobs:
         branch:         'infra/tests-revamp'
         options:        '-march=skylake-avx512'
         cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+
+  gcc-sse2:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-sse2
+    steps:
+    - name: Testing EVE SSE2 - gcc
+      id: gcc_sse2
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-msse2'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  gcc-avx:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-avx
+    steps:
+    - name: Testing EVE AVX - gcc
+      id: gcc_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-mavx'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  gcc-avx2:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-avx2
+    steps:
+    - name: Testing EVE AVX2 - gcc
+      id: gcc_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-mavx2'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  gcc-avx512:
+    runs-on: ubuntu-latest
+    name: EVE:gcc-avx512
+    steps:
+    - name: Testing EVE AVX512 - gcc
+      id: gcc_avx
+      uses: jfalcou/github-actions@v1
+      with:
+        repository:     'https://github.com/jfalcou/eve'
+        branch:         'infra/tests-revamp'
+        options:        '-march=skylake-avx512'
+        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
   gcc-aarch64:
     runs-on: ubuntu-latest
     name: EVE:gcc-aarch64
