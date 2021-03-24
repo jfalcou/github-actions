@@ -7,7 +7,7 @@ compile_target()
   compile=$?;
   echo "::endgroup::" ;
 
-  return $compile
+  exit $compile
 }
 
 compile_targets()
@@ -15,10 +15,10 @@ compile_targets()
   for i in `../cmake/toolchain/filter.sh $1 keys`;
   do
   compile_target $i 3 ;
-  if [ -z $? ]
+  if [ "$?" -eq "0" ]
   then
     echo "::error $i can not be compiled!" ;
-    return 1 ;
+    exit 1 ;
   fi
   done;
 }
@@ -30,7 +30,7 @@ test_target()
   compile=$?;
   echo "::endgroup::" ;
 
-  return $compile
+  exit $compile
 }
 
 test_targets()
@@ -38,10 +38,10 @@ test_targets()
   for i in `../cmake/toolchain/filter.sh $1 values`;
   do
     test_target $i 4;
-    if [ -z $? ]
+    if [ "$?" -eq "0" ]
     then
       echo "::error $i tests failed!" ;
-      return 1 ;
+      exit 1 ;
     fi
   done;
 }
@@ -61,47 +61,47 @@ echo "::endgroup::"
 compile_targets ../cmake/toolchain/arch.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 test_targets    ../cmake/toolchain/arch.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 compile_targets ../cmake/toolchain/api.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 test_targets    ../cmake/toolchain/api.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 compile_targets ../cmake/toolchain/doc.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 test_targets    ../cmake/toolchain/doc.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 compile_targets ../cmake/toolchain/simd.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
 
 test_targets    ../cmake/toolchain/simd.targets.json
 if [ -z $? ]
 then
-  return -1 ;
+  exit 1;
 fi
