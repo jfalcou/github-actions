@@ -15,30 +15,31 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-        - { comp: clang, arch: x86    , opts: -msse2                }
-        - { comp: clang, arch: x86    , opts: -msse4.2              }
-        - { comp: clang, arch: x86    , opts: -mavx                 }
-        - { comp: clang, arch: x86    , opts: -mavx2                }
-        - { comp: clang, arch: x86    , opts: -march=skylake-avx512 }
-        - { comp: clang, arch: x86    , opts: -DEVE_NO_SIMD         }
-        - { comp: gcc  , arch: x86    , opts: -msse2                }
-        - { comp: gcc  , arch: x86    , opts: -msse4.2              }
-        - { comp: gcc  , arch: x86    , opts: -mavx                 }
-        - { comp: gcc  , arch: x86    , opts: -mavx2                }
-        - { comp: gcc  , arch: x86    , opts: -march=skylake-avx512 }
-        - { comp: gcc  , arch: x86    , opts: -DEVE_NO_SIMD         }
-        - { comp: gcc  , arch: aarch64, opts: -Wno-psabi            }
-        - { comp: gcc  , arch: arm    , opts: -Wno-psabi            }
+        - { comp: clang, arch: x86    , opts: -msse2                , status: true  }
+        - { comp: clang, arch: x86    , opts: -msse4.2              , status: true  }
+        - { comp: clang, arch: x86    , opts: -mavx                 , status: true  }
+        - { comp: clang, arch: x86    , opts: -mavx2                , status: true  }
+        - { comp: clang, arch: x86    , opts: -march=skylake-avx512 , status: true  }
+        - { comp: clang, arch: x86    , opts: -DEVE_NO_SIMD         , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -msse2                , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -msse4.2              , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -mavx                 , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -mavx2                , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -march=skylake-avx512 , status: true  }
+        - { comp: gcc  , arch: x86    , opts: -DEVE_NO_SIMD         , status: true  }
+        - { comp: gcc  , arch: aarch64, opts: -Wno-psabi            , status: true  }
+        - { comp: gcc  , arch: arm    , opts: -Wno-psabi            , status: false }
 
     steps:
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      - name: Testing EVE with ${{ matrix.cfg.comp }} ${{ matrix.cfg.opts }}
-        uses: jfalcou/github-actions@v6
+      - name: Testing EVE with ${{ matrix.cfg.comp }} on ${{ matrix.cfg.arch }} with ${{ matrix.cfg.opts }}
+        uses: jfalcou/github-actions@v7
         with:
           repository:     'https://github.com/jfalcou/eve'
           branch:         '${{ steps.extract_branch.outputs.branch }}'
           options:        '${{ matrix.cfg.opts }}'
           cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/${{ matrix.cfg.comp }}.${{ matrix.cfg.arch }}.cmake'
+          status:        '${{ matrix.cfg.status }}'

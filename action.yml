@@ -18,6 +18,10 @@ inputs:
     description: 'CMake options'
     required: false
     default: ''
+  status:  # How much of the test we shoudl run
+    description: 'Completion Status'
+    required: false
+    default: 'true'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -26,4 +30,4 @@ runs:
     - ${{ inputs.branch }}
     - ${{ inputs.options }}
     - ${{ inputs.cmake-options }}
-    - ${{ inputs.targets }}
+    - ${{ inputs.status }}
