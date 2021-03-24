@@ -1,136 +1,202 @@
+name: E.V.E CI
 on: [push]
 
 jobs:
-  clang-sse2:
+  build:
     runs-on: ubuntu-latest
-    name: EVE:clang-sse2
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [clang, gcc]
+        arch:     [x86]
+        options:  [-msse2,-msse4.2,-mavx,-mavx2,-march=skylake-avx512]
     steps:
-    - name: Testing EVE SSE2 - Clang
-      id: clang_sse2
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-msse2'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
-  clang-avx:
-    runs-on: ubuntu-latest
-    name: EVE:clang-avx
-    steps:
-    - name: Testing EVE AVX - Clang
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-mavx'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
-  clang-avx2:
-    runs-on: ubuntu-latest
-    name: EVE:clang-avx2
-    steps:
-    - name: Testing EVE AVX2 - Clang
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-mavx2'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
-  clang-avx512:
-    runs-on: ubuntu-latest
-    name: EVE:clang-avx512
-    steps:
-    - name: Testing EVE AVX512 - Clang
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-march=skylake-avx512'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Testing EVE SSE2 - ${{ matrix.compiler }}
+        uses: jfalcou/github-actions@v6
+        with:
+          repository:     'https://github.com/jfalcou/eve'
+          branch:         '${{ steps.extract_branch.outputs.branch }}'
+          options:        '${{ matrix.options }}'
+          cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/${{ matrix.compiler }}.${{ matrix.arch }}.cmake'
 
-  gcc-sse2:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-sse2
-    steps:
-    - name: Testing EVE SSE2 - gcc
-      id: gcc_sse2
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-msse2'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
-  gcc-avx:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-avx
-    steps:
-    - name: Testing EVE AVX - gcc
-      id: gcc_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-mavx'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
-  gcc-avx2:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-avx2
-    steps:
-    - name: Testing EVE AVX2 - gcc
-      id: gcc_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-mavx2'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
-  gcc-avx512:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-avx512
-    steps:
-    - name: Testing EVE AVX512 - gcc
-      id: gcc_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-march=skylake-avx512'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
-  gcc-aarch64:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-aarch64
-    steps:
-    - name: Testing EVE AARCH64 - G++
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-Wno-psabi'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.aarch64.cmake'
-  gcc-arm-v7:
-    runs-on: ubuntu-latest
-    name: EVE:gcc-arm-v7
-    steps:
-    - name: Testing EVE ARM v7 - G++
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-Wno-psabi'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.arm.cmake'
-  clang-emulation:
-    runs-on: ubuntu-latest
-    name: EVE:clang-emulation
-    steps:
-    - name: Testing EVE Emulation - Clang
-      id: clang_avx
-      uses: jfalcou/github-actions@v6
-      with:
-        repository:     'https://github.com/jfalcou/eve'
-        branch:         'develop'
-        options:        '-DEVE_NO_SIMD'
-        cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  # clang-sse2:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:clang-sse2
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE SSE2 - Clang
+  #     id: clang_sse2
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-msse2'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  # clang-avx:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:clang-avx
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX - Clang
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-mavx'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  # clang-avx2:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:clang-avx2
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX2 - Clang
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-mavx2'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+  # clang-avx512:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:clang-avx512
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX512 - Clang
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-march=skylake-avx512'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
+
+  # gcc-sse2:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-sse2
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE SSE2 - gcc
+  #     id: gcc_sse2
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-msse2'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  # gcc-avx:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-avx
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX - gcc
+  #     id: gcc_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-mavx'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  # gcc-avx2:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-avx2
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX2 - gcc
+  #     id: gcc_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-mavx2'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  # gcc-avx512:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-avx512
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AVX512 - gcc
+  #     id: gcc_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-march=skylake-avx512'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.x86.cmake'
+  # gcc-aarch64:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-aarch64
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE AARCH64 - G++
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-Wno-psabi'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.aarch64.cmake'
+  # gcc-arm-v7:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:gcc-arm-v7
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE ARM v7 - G++
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-Wno-psabi'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/gcc.arm.cmake'
+  # clang-emulation:
+  #   runs-on: ubuntu-latest
+  #   name: EVE:clang-emulation
+  #   steps:
+  #   - name: Extract branch name
+  #     shell: bash
+  #     run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #     id: extract_branch
+  #   - name: Testing EVE Emulation - Clang
+  #     id: clang_avx
+  #     uses: jfalcou/github-actions@v6
+  #     with:
+  #       repository:     'https://github.com/jfalcou/eve'
+  #       branch:         '${{ steps.extract_branch.outputs.branch }}'
+  #       options:        '-DEVE_NO_SIMD'
+  #       cmake-options:  '-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/clang.x86.cmake'
