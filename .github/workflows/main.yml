@@ -7,7 +7,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE SSE2 - Clang
   #     id: clang_sse2
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -19,7 +19,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX - Clang
   #     id: clang_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -31,7 +31,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX2 - Clang
   #     id: clang_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -43,7 +43,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX512 - Clang
   #     id: clang_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -56,7 +56,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE SSE2 - gcc
   #     id: gcc_sse2
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -68,7 +68,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX - gcc
   #     id: gcc_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -80,7 +80,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX2 - gcc
   #     id: gcc_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -92,7 +92,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AVX512 - gcc
   #     id: gcc_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -104,7 +104,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE AARCH64 - G++
   #     id: clang_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'
@@ -116,7 +116,7 @@ jobs:
     steps:
     - name: Testing EVE ARM v7 - G++
       id: clang_avx
-      uses: jfalcou/github-actions@v5
+      uses: jfalcou/github-actions@v6
       with:
         repository:     'https://github.com/jfalcou/eve'
         branch:         'infra/tests-revamp'
@@ -128,7 +128,7 @@ jobs:
   #   steps:
   #   - name: Testing EVE Emulation - Clang
   #     id: clang_avx
-  #     uses: jfalcou/github-actions@v5
+  #     uses: jfalcou/github-actions@v6
   #     with:
   #       repository:     'https://github.com/jfalcou/eve'
   #       branch:         'infra/tests-revamp'

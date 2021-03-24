@@ -14,7 +14,7 @@ compile_targets()
 {
   for i in `../cmake/toolchain/filter.sh $1 keys`;
   do
-  compile_target $i;
+  compile_target $i 3;
   if [ "$?" -ne "0" ]
   then
     echo "::error $i can not be compiled!" ;
