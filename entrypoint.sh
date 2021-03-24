@@ -7,20 +7,22 @@ compile_target()
   compile=$?;
   echo "::endgroup::" ;
 
-  echo "$compile"
+  return $compile;
 }
 
 compile_targets()
 {
   for i in `../cmake/toolchain/filter.sh $1 keys`;
   do
-  result=`compile_target $i 3`;
-  if [ "$result" -ne "0" ]
+  compile_target $i;
+  if [ "$?" -ne "0" ]
   then
     echo "::error $i can not be compiled!" ;
-    echo "1";
+    return 1;
   fi
   done;
+  
+  return 0;
 }
 
 test_target()
@@ -30,20 +32,22 @@ test_target()
   compile=$?;
   echo "::endgroup::" ;
 
-  echo "$compile"
+  return $compile;
 }
 
 test_targets()
 {
   for i in `../cmake/toolchain/filter.sh $1 values`;
   do
-    result=`test_target $i 4`;
-    if [ "$result" -ne "0" ]
+    test_target $i 4;
+    if [ "$?" -ne "0" ]
     then
       echo "::error $i tests failed!" ;
-      echo "1";
+      return 1;
     fi
   done;
+
+  return 0;
 }
 
 echo "::group::Checking out $1 @ $2"
@@ -58,50 +62,50 @@ cd build
 cmake .. -G Ninja -DCMAKE_CXX_FLAGS="$3" $4
 echo "::endgroup::"
 
-ok=$(compile_targets ../cmake/toolchain/arch.targets.json)
-if [ "$ok" -eq "1" ]
+compile_targets ../cmake/toolchain/arch.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(test_targets    ../cmake/toolchain/arch.targets.json)
-if [ "$ok" -eq "1" ]
+test_targets    ../cmake/toolchain/arch.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(compile_targets ../cmake/toolchain/api.targets.json)
-if [ "$ok" -eq "1" ]
+compile_targets ../cmake/toolchain/api.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(test_targets    ../cmake/toolchain/api.targets.json)
-if [ "$ok" -eq "1" ]
+test_targets    ../cmake/toolchain/api.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(compile_targets ../cmake/toolchain/doc.targets.json)
-if [ "$ok" -eq "1" ]
+compile_targets ../cmake/toolchain/doc.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(test_targets    ../cmake/toolchain/doc.targets.json)
-if [ "$ok" -eq "1" ]
+test_targets    ../cmake/toolchain/doc.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(compile_targets ../cmake/toolchain/simd.targets.json)
-if [ "$ok" -eq "1" ]
+compile_targets ../cmake/toolchain/simd.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
 
-ok=$(test_targets    ../cmake/toolchain/simd.targets.json)
-if [ "$ok" -eq "1" ]
+test_targets    ../cmake/toolchain/simd.targets.json
+if [ "$?" -eq "1" ]
 then
   exit 1;
 fi
