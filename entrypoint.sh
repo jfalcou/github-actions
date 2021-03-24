@@ -21,7 +21,7 @@ compile_targets()
     return 1;
   fi
   done;
-  
+
   return 0;
 }
 
@@ -86,28 +86,32 @@ then
   exit 1;
 fi
 
-compile_targets ../cmake/toolchain/doc.targets.json
-if [ "$?" -eq "1" ]
+if [ "$5" -eq "1" ]
 then
-  exit 1;
-fi
 
-test_targets    ../cmake/toolchain/doc.targets.json
-if [ "$?" -eq "1" ]
-then
-  exit 1;
-fi
+  compile_targets ../cmake/toolchain/doc.targets.json
+  if [ "$?" -eq "1" ]
+  then
+    exit 1;
+  fi
 
-compile_targets ../cmake/toolchain/simd.targets.json
-if [ "$?" -eq "1" ]
-then
-  exit 1;
-fi
+  test_targets    ../cmake/toolchain/doc.targets.json
+  if [ "$?" -eq "1" ]
+  then
+    exit 1;
+  fi
 
-test_targets    ../cmake/toolchain/simd.targets.json
-if [ "$?" -eq "1" ]
-then
-  exit 1;
+  compile_targets ../cmake/toolchain/simd.targets.json
+  if [ "$?" -eq "1" ]
+  then
+    exit 1;
+  fi
+
+  test_targets    ../cmake/toolchain/simd.targets.json
+  if [ "$?" -eq "1" ]
+  then
+    exit 1;
+  fi
 fi
 
 exit 0
